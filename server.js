@@ -23,7 +23,13 @@ app.get("/api/hello", function (req, res) {
   res.json({ greeting: "hello API" });
 });
 
-app.get("/api/:date", function (req, res) {
+app.get("/api/:date?", function (req, res) {
+  if (!req.params.date) {
+    const date = new Date();
+    res.json({ unix: date.getTime(), utc: date.toUTCString() });
+    return;
+  }
+
   const dateStr = req.params.date;
   const date = /^\d+$/.test(dateStr)
     ? new Date(parseInt(dateStr, 10))
